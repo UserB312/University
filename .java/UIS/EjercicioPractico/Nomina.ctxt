@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Nomina
+comment1.params=
+comment1.target=Nomina()
+comment2.params=e
+comment2.target=void\ addEmpleado(Empleado)
+comment3.params=
+comment3.target=void\ imprimirNomina()
+numComments=4

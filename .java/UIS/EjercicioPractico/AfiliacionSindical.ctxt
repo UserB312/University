@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=AfiliacionSindical
+comment1.params=
+comment1.target=double\ getBonoAntiguedad()
+comment2.params=
+comment2.target=double\ getAporteASindicato()
+numComments=3
