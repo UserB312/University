@@ -1,0 +1,345 @@
+struct COLA_EMDUPAR{
+    int PRIORIDAD;
+    COLA_EMDUPAR *SIG;
+    COLA_EMDUPAR *ANT;
+} *FRENTE, *P, *POS, *FIN;
+
+EMDUPAR_PRIORIDAD()
+    REPITA
+        Escriba ("********** EMDUPAR **********")
+        Escriba ("1. Servicio de Impresion")
+        Escriba ("2. Salir")
+        Escriba ("Digite una Opcion: ")
+        Lea (OP)
+        DD (OP) HAGA
+            case 1:
+                NEW (P)
+                SI (P = NILL) ENT
+                    Escriba ("ERROR... No Hay Mas Servicio de Impresion")
+                  SINO
+                    Escriba ("********** SERVICIO DE IMPRESION **********")
+                    Escriba ("1. Tecnico Operativa")
+                    Escriba ("2. Financiera")
+                    Escriba ("3. Recursos Humanos")
+                    Escriba ("4. Atencion al Cliente")
+                    Escriba ("ELIJA SU DEPENDENCIA: ")
+                    Lea (P↑.PRIORIDAD)
+                    P↑.SIG ← NIL
+                    P↑.ANT ← NIL
+                    SI (FRENTE = NIL) ENT
+                        FRENTE ← P
+                        FIN ← P
+                    SINO
+                        POS ← FRENTE
+                        MQ ((POS <> NILL) AND (POS↑.PRIORIDAD >= P↑.PRIORIDAD)) HAGA
+                            POS ← POS↑.SIG
+                        FIN MQ
+                        SI (POS = NIL) ENT
+                            FIN↑.SIG ← P
+                            P↑.ANT ← FIN
+                            FIN ← P
+                        SINO
+                            SI (POS = FRENTE) ENT
+                                P↑.SIG ← FRENTE
+                                FRENTE↑.ANT ← P
+                                FRENTE ← P
+                            SINO
+                                P↑.SIG ← POS
+                                P↑.ANT ← POS↑.ANT
+                                POS↑.ANT↑.SIG ← P
+                                POS↑.ANT ← P
+                            FIN SI
+                        FIN SI
+                    FIN SI
+                FIN SI                
+                break;
+            case 2:
+                Escriba ("Fin del Programa")
+                break;
+            default:
+                Escriba ("ERROR... Digite una Opcion Valida")
+                break;
+        FIN DD
+    HASTA (OP = 2)
+FIN IMPRIMIR_PRIORIDAD
+
+struct COLA {
+    int ID;
+    Time H_Llegada;
+    COLA *SIG;
+    COLA *ANT;
+} *FRENTE, *P, *POS, *FIN;
+
+struct COLA_PRIO {
+    int PRIORIDAD;
+    Time H_Llegada;
+    COLA_PRIO *SIG;
+    COLA_PRIO *ANT;
+} *FRENTE, *P, *POS, *FIN;
+PRINCIPAL
+    Escriba ("Hora Inicial: ")
+    Lea (H_Inicial)
+    Escriba ("Hora Final: ")
+    Lea (H_Final)
+    MQ ((Hora_Sistema() >= H_Inicial) AND (Hora_Sistema() <= H_Final) AND (OP <> 6)) HACER
+        Escriba ("********** MENU PRINCIPAL **********")
+        Escriba ("1. Agregar en la Cola")
+        Escriba ("2. Sacar de la Cola")
+        Escriba ("3. Mostrar la Cola")
+        Escriba ("4. Vaciar la Cola")
+        Escriba ("5. Salida NO FIFO")
+        Escriba ("6. Salir del Programa")
+        Lea (OP)
+
+        DD (OP) HAGA
+            case 1:
+                Escriba ("********** AGREGAR **********")
+                AGREGAR(); AGG_PRIORIDAD()
+                break;
+            case 2:
+                Escriba ("********** SACAR **********")
+                SACAR()
+                break;
+            case 3:
+                Escriba ("********** CONSULTA **********")
+                CONSULTA()
+                break;
+            case 4:
+                Escriba ("********** VACIAR **********")
+                VACIAR()
+                break;
+            case 5:
+                Escriba ("********** SALIDA NO FIFO **********")
+                SALIDA_NOFIFO()
+                break;
+            case 6:
+                Escriba ("Fin del Programa")
+                break;
+            default:
+                Escriba ("ERROR... Digite una Opcion Valida")
+                break;
+        FIN DD
+    FIN MQ
+    RESULTADOS()
+FIN PRINCIPAL
+
+AGREGAR()
+    NEW (P)
+    SI (P = NIL) ENT
+        Escriba ("ERROR... No Mas Clientes")
+      SINO
+        Num_Ficha ← 1
+        P↑.ID ← Num_Ficha
+        P↑.H_Llegada ← Hora_Sistema()
+        P↑.SIG ← NIL
+        P↑.ANT ← NIL
+        SI (FRENTE = NIL) ENT
+            FRENTE ← P
+            FIN ← P
+            NCLL ← NCLL + 1
+          SINO
+            FIN↑.SIG ← P
+            P↑.ANT ← FIN
+            FIN ← P
+            NCLL ← NCLL + 1
+        FIN SI
+        Num_Ficha ← Num_Ficha + 1
+    FIN SI
+FIN AGREGAR
+
+AGG_PRIORIDAD()
+    NEW (P)
+    SI (P = NIL) ENT
+        Escriba ("ERROR... No Mas Clientes")
+      SINO
+        Escriba ("********** TIPO DE PERSONA **********")
+        Escriba ("4. Embarazada")
+        Escriba ("3. Tercera Edad")
+        Escriba ("2. Discapacitado(a)")
+        Escriba ("1. Otro")
+        Escriba ("Digite una Opcion de Prioridad: ")
+        Lea (P↑.PRIORIDAD)
+        P↑.H_Llegada ← Hora_Sistema()
+        P↑.SIG ← NIL
+        P↑.ANT ← NIL
+        SI (FRENTE = NIL) ENT
+            FRENTE ← P
+            FIN ← P
+          SINO
+            POS ← FRENTE
+            MQ ((POS <> NILL) AND (POS↑.PRIORIDAD >= P↑.PRIORIDAD)) HAGA
+                POS ← POS↑.SIG
+            FIN MQ
+            SI (POS = NIL) ENT
+                FIN↑.SIG ← P
+                P↑.ANT ← FIN
+                FIN ← P
+              SINO
+                SI (POS = FRENTE) ENT
+                    P↑.SIG ← FRENTE
+                    FRENTE↑.ANT ← P
+                    FRENTE ← P
+                  SINO
+                    P↑.ANT ← POS↑.ANT
+                    P↑.SIG ← POS
+                    POS↑.ANT↑.SIG ← P
+                    POS↑.ANT ← P
+                FIN SI
+            FIN SI
+        FIN SI
+    FIN SI
+FIN AGG_PRIORIDAD
+
+SACAR()
+    SI (FRENTE = NIL) ENT
+        Escriba ("ERROR... No hay Clientes")
+      SINO
+        DATO ← FRENTE↑.ID
+        P ← FRENTE
+        FRENTE ← FRENTE↑.SIG
+        FRENTE↑.ANT ← NIL
+        NCA ← NCA + 1
+        T_ENCOLA ← Hora_Sistema() - P↑. H_Llegada
+        TOTTENCOLA ← TOTTENCOLA + T_ENCOLA
+        DISPOSE(P)
+    FIN SI
+    return (DATO)
+FIN SACAR
+
+CONSULTA()
+    SI (FRENTE = NIL) ENT
+        Escriba ("ERROR... No hay Clientes")
+      SINO
+        P ← FRENTE
+        MQ (P <> NIL) HAGA
+            Escriba ("P↑.ID, P↑.H_Llegada")
+            P ← P↑.SIG
+        FIN MQ
+    FIN SI
+FIN CONSULTA
+
+VACIAR()
+    SI (FRENTE = NIL) ENT
+        Escriba ("La Pila ya esta Vacia")
+      SINO
+        REPITA
+            P ← FRENTE
+            FRENTE ← FRENTE↑.SIG
+            CNA ← CNA + 1
+            DISPOSE(P)
+        HASTA (FRENTE = NIL)
+    FIN SI
+FIN VACIAR
+
+SALIDA_NOFIFO()
+    SI (FRENTE = NIL) ENT
+        Escriba ("ERROR... No hay Datos")
+      SINO
+        Escriba ("ID a Borrar: ")
+        Lea (Id_Delete)
+        P ← FRENTE; ENC ← 'N'
+        MQ ((P <> NIL) AND (ENC = 'N')) ENT
+            SI (P↑.ID = Id_Delete) ENT
+                ENC ← 'S'; POS ← P
+              SINO
+                P ← P↑.SIG
+            FIN SI
+        FIN MQ
+        SI (ENC = 'N') ENT
+            Escriba ("ERROR... No Existe el ID")
+          SINO
+            SI ((POS = FRENTE) AND (FRENTE↑.SIG = NIL)) ENT
+                FRENTE ← NIL
+                DISPOSE(POS)
+              SINO
+                SI ((POS = FRENTE) AND (FRENTE↑.SIG <> NIL)) ENT
+                    FRENTE ← FRENTE↑.SIG
+                    FRENTE↑.ANT ← NIL
+                    DISPOSE(POS)
+                  SINO
+                    SI (POS↑.SIG = NIL) ENT
+                        POS↑.ANT↑.SIG ← NIL
+                        FIN ← POS↑.ANT
+                        DISPOSE(POS)
+                      SINO
+                        POS↑.ANT↑.SIG ← POS↑.SIG
+                        POS↑.SIG↑.ANT ← POS↑.ANT
+                        DISPOSE (POS)
+                    FIN SI
+                FIN SI
+            FIN SI
+        FIN SI
+FIN SALIDA_NOFIFO
+
+RESULTADOS()
+    Escriba ("********** RESULTADOS **********")
+    Escriba ("Total Clientes que Asisten al Banco: ", NCLL)
+    Escriba ("Total Cleintes Efectivamente Atendidos: ", NCA)
+    Escriba ("Tiempo Promedio de Permanencia en Cola: ", TOTTENCOLA / NCA)
+FIN RESULTADOS
+
+*******************************************************************************************************
+struct COLA_EMDUPAR{
+    int PRIORIDAD;
+    COLA_EMDUPAR *SIG;
+    COLA_EMDUPAR *ANT;
+} *FRENTE, *P, *POS, *FIN;
+
+EMDUPAR_PRIORIDAD()
+    REPITA
+        Escriba ("********** EMDUPAR **********")
+        Escriba ("1. Servicio de Impresion")
+        Escriba ("2. Salir")
+        Escriba ("Digite una Opcion: ")
+        Lea (OP)
+        DD (OP) HAGA
+            case 1:
+                NEW (P)
+                SI (P = NILL) ENT
+                    Escriba ("ERROR... No Hay Mas Servicio de Impresion")
+                  SINO
+                    Escriba ("********** SERVICIO DE IMPRESION **********")
+                    Escriba ("1. Tecnico Operativa")
+                    Escriba ("2. Financiera")
+                    Escriba ("3. Recursos Humanos")
+                    Escriba ("4. Atencion al Cliente")
+                    Escriba ("ELIJA SU DEPENDENCIA: ")
+                    Lea (P↑.PRIORIDAD)
+                    P↑.SIG ← NIL
+                    P↑.ANT ← NIL
+                    SI (FRENTE = NIL) ENT
+                        FRENTE ← P
+                        FIN ← P
+                    SINO
+                        POS ← FRENTE
+                        MQ ((POS <> NILL) AND (POS↑.PRIORIDAD >= P↑.PRIORIDAD)) HAGA
+                            POS ← POS↑.SIG
+                        FIN MQ
+                        SI (POS = NIL) ENT
+                            FIN↑.SIG ← P
+                            P↑.ANT ← FIN
+                            FIN ← P
+                        SINO
+                            SI (POS = FRENTE) ENT
+                                P↑.SIG ← FRENTE
+                                FRENTE↑.ANT ← P
+                                FRENTE ← P
+                            SINO
+                                P↑.ANT ← POS↑.ANT
+                                P↑.SIG ← POS
+                                POS↑.ANT↑.SIG ← P
+                                POS↑.ANT ← P
+                            FIN SI
+                        FIN SI
+                    FIN SI
+                FIN SI                
+                break;
+            case 2:
+                Escriba ("Fin del Programa")
+                break;
+            default:
+                Escriba ("ERROR... Digite una Opcion Valida")
+                break;
+        FIN DD
+    HASTA (OP = 2)
+FIN IMPRIMIR_PRIORIDAD

@@ -1,0 +1,82 @@
+
+struct IMPRESION {
+    char dependencia[30];
+    IMPRESION *SIG;
+    IMPRESION *ANT;
+}*Frente,*P, *Fin;
+
+COLA_LLENA()
+    SI (new(P) = NULL) ENT
+        RETURN TRUE
+    SINO
+        RETURN FALSE
+    FSI
+FIN COLA_LLENA
+
+COLA_VACIA()
+    SI (FRENTE = NULL) ENT
+        RETURN TRUE
+    SINO
+        RETURN FALSE
+    FSI
+FIN COLA_VACIA
+
+PRIORIDAD(IMPRESION* P)
+    int PRIO = 0;
+    DD (P.^dependencia)HAGA
+        case "Atencion al cliente":
+            PRIO = 4
+            break;
+        case "Recursos humanos":
+            PRIO = 3
+            break;
+        case "Financiera":
+            PRIO = 2
+            break;
+        case "Tecnico operativa":
+            PRIO = 1
+            break;
+    FIN DD
+    RETURN PRIO;
+FIN PRIORIDAD
+
+METER_EN_LA_COLA_PRIO()
+    SI (COLA_LLENA()) ENT
+        Escribir("NO SE ACEPTAN MAS IMPRESIONES")
+    SINO
+        Escribir("INGRESE LA DEPENDENCIA DE LA OFICINA : ")
+        LEA(P^.dependencia)
+        //BALANCEAMOS EL NODO
+        P^.SIG <- NULL
+        P^.ANT <- NULL
+
+        SI (COLA_VACIA()) ENT
+            FRENTE <- P; FIN <- P;
+        SINO
+            Q <- FRENTE
+
+            // Buscar posición adecuada para insertar el nuevo nodo P
+            MQ ((Q^.SIG != NULL) AND (PRIORIDAD(Q^.dependencia) < PRIORIDAD(P.^dependencia)))
+                Q <- Q^.SIG
+            FMQ
+
+            SI (Q = FRENTE) ENT
+                // Insertar P al principio de la cola
+                P^.SIG <- FRENTE
+                FRENTE^.ANT <- P
+                FRENTE <- P
+            SINO
+                // Insertar P en el medio o al final de la cola
+                P^.SIG <- Q^.SIG
+                P^.ANT <- Q
+                Si (Q^.SIG <> Nulo) Entonces
+                    Q^.SIG^.ant <- P
+                Fin Si
+                Q^.SIG <- P
+                Si (Q = FIN) Entonces
+                    FIN <- P
+                Fin Si
+            Fin Si
+        Fin Si
+    Fin Si
+FIN METER_EN_LA_COLA_PRIO()

@@ -1,0 +1,36 @@
+STRUCT NODOARBOL{
+    int DATO
+    NODOARBOL *SUB.izq;
+    NODOARBOL *SUB.der;
+}*R, *P, *Aux1, *Aux2
+
+PPAL ARBOL()
+    CREAR_ARBOL()
+    PREORDEN(R)
+    INORDEN(R)
+    POSTORDEN(R)
+FIN PPAL
+
+PREORDEN(*NODOARBOL P)
+    SI(P <> null)ENT
+        Escribir(P.^DATO)
+        PREORDEN(P.^izq)
+        PREORDEN(P.^der)
+    FSI
+FIN PREORDEN
+
+INORDEN( *NODOARBOL P)
+    SI(P <> null)ENT
+        INORDEN(P.^izq)
+        Escribir(P.^DATO)
+        INORDEN(P.^der)
+    FSI
+FIN INORDEN
+
+POSTORDEN(*NODOARBOL P)
+    SI(P <> null)ENT
+        POSTORDEN(P.^izq)
+        POSTORDEN(P.^der)
+        Escribir(P.^DATO)
+    FSI
+FIN POSTORDEN
